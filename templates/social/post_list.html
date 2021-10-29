@@ -25,12 +25,30 @@ Posts
         </div>
     </div>
     {% for post in posts %}
-    <div class="row justify-content-center mt-3 mb-5 border-bottom">
+    <div class="row justify-content-center mt-3 mb-5 border-bottom position-relative">
         <div class="col-md-5 col-sm-12">
-            <h5 class="p-0 m-0"><strong>{{ post.author }}</strong></h6>
+            <h6 class="p-0 m-0"><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' post.author.profile.pk %}">@{{ post.author }}</a></h6>
             <span class="text-muted">{{ post.created_at }}</span>
-            <p class="m-3">{{ post.body }}</p>
-            <a class="stretched-link" href="{% url 'post-detail' post.pk %}"></a>
+            <div class="position-relative">
+                <p>{{ post.body }}</p>
+                <a class="stretched-link" href="{% url 'post-detail' post.pk %}"></a>
+            </div>
+            <div class="d-flex flex-row">
+                <form action="{% url 'like' post.pk%}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}" />
+                    <button type="submit" style="background-color: transparent; border: none; box-shadow: none;">
+                        <i class="far fa-thumbs-up"></i> <span>{{ post.likes.all.count }}</span>
+                    </button>
+                </form>
+                <form action="{% url 'dislike' post.pk%}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}" />
+                    <button type="submit" style="background-color: transparent; border: none; box-shadow: none;">
+                        <i class="far fa-thumbs-down"></i> <span>{{ post.dislikes.all.count }}</span>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
     {% endfor %}

@@ -13,19 +13,35 @@
                 <a href="{% url 'post-delete' post.pk %}" style="color: #333;"><i class="fas fa-trash"></i></a>
                 {% endif %}
                 </div>
-                <strong>{{ post.author }}</strong> {{ post.created_at }}
+                <a style="text-decoration: none;" class="text-primary" href="{% url 'profile' post.author.profile.pk %}">@{{ post.author }}</a> {{ post.created_at }}
             </p>
             <p>{{ post.body }}</p>
+            <div class="d-flex flex-row">
+                <form action="{% url 'like' post.pk%}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}" />
+                    <button type="submit" style="background-color: transparent; border: none; box-shadow: none;">
+                        <i class="far fa-thumbs-up"></i> <span>{{ post.likes.all.count }}</span>
+                    </button>
+                </form>
+                <form action="{% url 'dislike' post.pk%}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}" />
+                    <button type="submit" style="background-color: transparent; border: none; box-shadow: none;">
+                        <i class="far fa-thumbs-down"></i> <span>{{ post.dislikes.all.count }}</span>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
     <div class="row justify-content-center mt-3">
         <div class="col-md-5 col-sm-12">
-            <h5>Add a Comment!</h5>
         </div>
     </div>
     <div class="row justify-content-center mt-3 mb-5">
         <div class="col-md-5 col-sm-12">
+            <h7>Add a Comment!</h7>
             <form method="POST">
                 {% csrf_token %}
                 {{ form | crispy }}
@@ -38,7 +54,7 @@
     {% for comment in comments %}
     <div class="row justify-content-center mt-3 mb-5 border-bottom">
         <div class="col-md-5 col-sm-12">
-            <h5 class="p-0 m-0"><strong>{{ comment.author }}</strong></h6>
+            <h6 class="p-0 m-0"><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' comment.author.profile.pk %}">@{{ comment.author }}</a></h6>
             <span class="text-muted">{{ comment.created_at }}</span>
             {% if request.user == comment.author %}
             <a href="{% url 'comment-delete' post.pk comment.pk %}" class="float-end" style="color: #333;"><i class="fas fa-trash"></i></a>

@@ -151,6 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # EMAIL CONFIG  
 EMAIL_FROM_USER = os.environ.get('EMAIL_USER',).replace('\n', '').replace('\r', '')
