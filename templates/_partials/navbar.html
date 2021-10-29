@@ -26,10 +26,20 @@
             <a class="nav-link disabled">Disabled</a>
             </li>
         </ul>
-        <form class="d-flex">
+        <form class="d-flex" method="get" action="{% url 'profile-search'%}">
+            {% csrf_token %}
             <div class="input-group">
                 <span class="input-group-text" id="basic-addon1">@</span>
-                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                <input 
+                    type="text" 
+                    name="query" 
+                    value="{{ request.GET.query }}" 
+                    class="form-control" 
+                    placeholder="Search username..."  
+                    aria-label="Username" 
+                    aria-describedby="basic-addon1"
+                >
+                <button type="submit" style="border: none; background-color:transparent; box-shadow:none;"><i class="fas fa-search"></i></button>
             </div>
         </form>
         {% if user.is_authenticated %}
