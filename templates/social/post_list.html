@@ -27,8 +27,13 @@ Posts
     {% for post in posts %}
     <div class="row justify-content-center mt-3 mb-5 border-bottom position-relative">
         <div class="col-md-5 col-sm-12">
-            <h6 class="p-0 m-0"><a style="text-decoration: none;" class="text-primary" href="{% url 'profile' post.author.profile.pk %}">@{{ post.author }}</a></h6>
-            <span class="text-muted">{{ post.created_at }}</span>
+            <div>
+                <a href="{% url 'profile' post.author.profile.pk %}">
+                    <img class="rounded-circle post-img" height="40" width="40" src="{{ post.author.profile.picture.url }}" />
+                </a>
+                <h6 class="p-0 m-0"><a class="text-primary post-link" href="{% url 'profile' post.author.profile.pk %}">@{{ post.author }}</a></h6>
+                <span class="text-muted">{{ post.created_at }}</span>
+            </div>
             <div class="position-relative">
                 <p>{{ post.body }}</p>
                 <a class="stretched-link" href="{% url 'post-detail' post.pk %}"></a>
@@ -37,14 +42,14 @@ Posts
                 <form action="{% url 'like' post.pk%}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}" />
-                    <button type="submit" style="background-color: transparent; border: none; box-shadow: none;">
+                    <button type="submit" class="remove-default-btn">
                         <i class="far fa-thumbs-up"></i> <span>{{ post.likes.all.count }}</span>
                     </button>
                 </form>
                 <form action="{% url 'dislike' post.pk%}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}" />
-                    <button type="submit" style="background-color: transparent; border: none; box-shadow: none;">
+                    <button type="submit" class="remove-default-btn">
                         <i class="far fa-thumbs-down"></i> <span>{{ post.dislikes.all.count }}</span>
                     </button>
                 </form>

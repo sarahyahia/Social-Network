@@ -11,7 +11,10 @@ from django.http import HttpResponseRedirect
 
 class PostView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        posts = Post.objects.all()
+        logged_in_user = request.user
+        posts = Post.objects.filter(
+            author__profile__followers__in =[logged_in_user.id]
+        )
         form = PostForm()
         
         context ={
